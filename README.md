@@ -52,6 +52,24 @@ Kaggle's working directory is temporary; use the notebook's **Save Version**
 or create an output dataset to preserve generated files. The Kaggle runtime
 must also have the repository's model dependencies installed to train TIGER.
 
+For the prepared Stage 3 Reddit dataset (`interactions_filtered.csv` and
+`F.npy`), use [`run.ipynb`](./run.ipynb) to create chronological 70/15/15
+event splits, `Test-new`/`Test-all` evaluation tables, and time-aware random
+and historical negatives. Open/import the notebook from GitHub in Kaggle,
+enable Internet so its first cell can clone this repository, and attach the
+Stage 3 files as a Kaggle Input dataset (or set `DATA_DIR` in the first cell).
+Its training cell saves checkpoints in `saved_models/`; use Kaggle **Save
+Version** to preserve `/kaggle/working` outputs. The notebook's final cell
+runs evaluation after training; set `RUN_TIGER_TRAINING = False` to prepare
+artifacts without training. The repository's
+existing runner still evaluates using its built-in quantile split and negative
+sampler, so use the notebook's generated CSV files when evaluating the custom
+Stage 4 protocol. After a successful training run, the notebook also replays
+events online and writes Stage 6 metrics (`stage6_test_metrics.csv`), the
+validation-selected baseline parameters, and a weekly MRR chart to the Stage 4
+output directory. Random-negative AUC/AP is averaged across five seeds; ranking
+metrics use the complete candidate set for the selected negative type.
+
 # How to use
 
 Temporal Link Prediction
